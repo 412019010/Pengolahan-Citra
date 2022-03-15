@@ -1,2 +1,2 @@
 # Pengolahan-Citra
-this is adalah projek
+this is adalah projek together
