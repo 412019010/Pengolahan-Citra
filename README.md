@@ -1,2 +1,2 @@
 # Pengolahan-Citra
-this is ini adalah projek bersama together
+Projek mendeteksi jumlah orang pada ruangan
