@@ -42,4 +42,4 @@ if __name__ == "__main__":
     HOGCV = cv2.HOGDescriptor()
     HOGCV.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
     
-    detectByPathImage("ukrida1.jpg","count.jpeg")
+    detectByPathImage("Pejalan3.jpg","count.jpeg")
