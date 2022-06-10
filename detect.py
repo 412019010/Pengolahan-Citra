@@ -6,7 +6,7 @@ import imutils
 hog = cv2.HOGDescriptor()
 hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 
-cap = cv2.VideoCapture('video/video2.mp4')
+cap = cv2.VideoCapture('pejalan3.mp4')
 
 while cap.isOpened():
 	person = 0
@@ -43,6 +43,8 @@ while cap.isOpened():
 			b = 0
 
 		cv2.putText(image, 'Jumlah orang : {}'.format(person), (40,70), cv2.FONT_HERSHEY_DUPLEX, 0.8, (b,g,r), 2)
+		if r>0 :
+			cv2.putText(image, 'lebiih dari 4 orang terdeteksi', (40, 120), cv2.FONT_HERSHEY_DUPLEX, 0.8, (b, g, r), 2)
 
 		# Showing the output Image
 		cv2.imshow("Image", image)
@@ -50,6 +52,3 @@ while cap.isOpened():
 			break
 	else:
 		break
-
-cap.release()
-cv2.destroyAllWindows()
