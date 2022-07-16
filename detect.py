@@ -1,54 +1,62 @@
 import cv2
 import imutils
+from re import search
 
-# Initializing the HOG person
-# detector
 hog = cv2.HOGDescriptor()
 hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 
-cap = cv2.VideoCapture('pejalan3.mp4')
+file = 'video/lurus.mp4'
 
-while cap.isOpened():
+def detect(frame):
+	frame = imutils.resize(frame, width=min(800, frame.shape[1]))
+	
+	frameg = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+	
+	(regions, _) = hog.detectMultiScale(frameg,
+										winStride=(4, 4),
+										padding=(4, 4),
+										scale=1.05)
+
 	person = 0
+	for (x, y, w, h) in regions:
+		cv2.rectangle(frame, (x, y),
+					(x + w, y + h),
+					(0, 255, 0), 2)
+		person += 1
 
-	# Reading the video stream
-	ret, image = cap.read()
-	if ret:
-		image = imutils.resize(image,
-							width=min(800, image.shape[1]))
+	if person >= 4 :
+		r = 255
+		g = 0
+		b = 0
+	else :
+		r = 0
+		g = 255
+		b = 0
 
-		# Detecting all the regions
-		# in the Image that has a
-		# pedestrians inside it
-		(regions, _) = hog.detectMultiScale(image,
-											winStride=(4, 4),
-											padding=(4, 4),
-											scale=1.05)
+	cv2.putText(frame, 'Jumlah orang : {}'.format(person), (40,70), cv2.FONT_HERSHEY_DUPLEX, 0.8, (b,g,r), 2)
+	if person >= 4 :
+			cv2.putText(frame, 'Lebih dari 4 orang terdeteksi', (40, 110), cv2.FONT_HERSHEY_DUPLEX, 0.8, (b, g, r), 2)
+	
+	cv2.imshow("Output", frame)
 
-		# Drawing the regions in the
-		# Image
-		for (x, y, w, h) in regions:
-			cv2.rectangle(image, (x, y),
-						(x + w, y + h),
-						(0, 255, 0), 2)
-			person += 1
+if search('.jpeg', file) or search('.jpg', file) or search('.png', file) :
+	frame = cv2.imread(file)
+	detect(frame)
+	
+	cv2.waitKey(0)
 
-		if person >= 4 :
-			r = 255
-			g = 0
-			b = 0
-		else :
-			r = 0
-			g = 255
-			b = 0
+elif search('.mp4', file) or search('.avi', file) :
+	cap = cv2.VideoCapture(file)
 
-		cv2.putText(image, 'Jumlah orang : {}'.format(person), (40,70), cv2.FONT_HERSHEY_DUPLEX, 0.8, (b,g,r), 2)
-		if r>0 :
-			cv2.putText(image, 'lebiih dari 4 orang terdeteksi', (40, 120), cv2.FONT_HERSHEY_DUPLEX, 0.8, (b, g, r), 2)
+	while cap.isOpened():
 
-		# Showing the output Image
-		cv2.imshow("Image", image)
-		if cv2.waitKey(25) & 0xFF == ord('q'):
+		ret, frame = cap.read()
+		if ret:
+			detect(frame)
+			if cv2.waitKey(1) & 0xFF == ord('\x1b'):
+				break
+		else:
 			break
-	else:
-		break
+	cap.release()
+
+cv2.destroyAllWindows()
