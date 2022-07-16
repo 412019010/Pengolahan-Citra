@@ -28,14 +28,13 @@ def detect(frame):
 		r = 255
 		g = 0
 		b = 0
+		cv2.putText(frame, 'Lebih dari 3 orang terdeteksi', (40, 110), cv2.FONT_HERSHEY_DUPLEX, 0.8, (b, g, r), 2)
 	else :
 		r = 0
 		g = 255
 		b = 0
 
 	cv2.putText(frame, 'Jumlah orang : {}'.format(person), (40,70), cv2.FONT_HERSHEY_DUPLEX, 0.8, (b,g,r), 2)
-	if person >= 4 :
-			cv2.putText(frame, 'Lebih dari 4 orang terdeteksi', (40, 110), cv2.FONT_HERSHEY_DUPLEX, 0.8, (b, g, r), 2)
 	
 	cv2.imshow("Output", frame)
 
